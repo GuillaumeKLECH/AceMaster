@@ -82,14 +82,24 @@ public class ScoreManager {
 
 	public void playerOneScored() {
 		if(!matchWon()) {
-			p1Score += 1;
+			if(p2Score == 4) {
+				p2Score = 3;
+				p1Score = 3;
+			} else {
+				p1Score += 1;
+			}
 			manageGame();
 		}
 	}
 
 	public void playerTwoScored() {
 		if(!matchWon()) {
-			p2Score += 1;
+			if(p1Score == 4) {
+				p1Score = 3;
+				p1Score = 3;
+			} else {
+				p2Score += 1;
+			}
 			manageGame();
 		}
 	}

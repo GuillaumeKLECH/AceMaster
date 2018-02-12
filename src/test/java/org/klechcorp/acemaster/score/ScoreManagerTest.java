@@ -47,6 +47,19 @@ public class ScoreManagerTest {
 	}
 	
 	@Test
+	public void canResetAdv() {
+		p1Adv();
+		scoreMan.playerTwoScored();
+		assertEquals("40-40", scoreMan.getCurrentGameScore());
+	}
+	
+	@Test
+	void canScoreAdv2() throws Exception {
+		p2Adv();
+		assertEquals("40-Adv", scoreMan.getCurrentGameScore());
+	}
+	
+	@Test
 	void canScoreAGame() throws Exception {
 		p1WinGame();
 		assertEquals(ONE_GAME, scoreMan.getSetResult());
@@ -141,6 +154,11 @@ public class ScoreManagerTest {
 	private void p1Adv() {
 		Helper.actRepeater(3, () -> {scoreMan.playerOneScored();scoreMan.playerTwoScored();});
 		scoreMan.playerOneScored();
+	}
+	
+	private void p2Adv() {
+		Helper.actRepeater(3, () -> {scoreMan.playerOneScored();scoreMan.playerTwoScored();});
+		scoreMan.playerTwoScored();
 	}
 	
 	private void p1WinGame() {
