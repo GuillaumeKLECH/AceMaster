@@ -1,9 +1,10 @@
 package org.klechcorp.acemaster.score;
 
+import java.util.Arrays;
+
 abstract class ScoringElmt {
-	protected int p1Score = 0;
-	protected int p2Score = 0;
-	
+	protected int[] score = new int[] {0,0};
+
 	private final int winThreshold;
 	private final int winDiff;
 	
@@ -21,19 +22,19 @@ abstract class ScoringElmt {
 	}
 	
 	void reset() {
-		p1Score = p2Score = 0;
+		Arrays.fill(this.score, 0);
 	}
 	
 	abstract String translateScore(int _score);
 	
 	void manageElmt() {
-		if(p1Score > this.winThreshold || p2Score > this.winThreshold) { // Possible win
+		if(score[0] > this.winThreshold || score[1] > this.winThreshold) { // Possible win
 			onPossibleWin();
 		}
 	}
 	
 	void onPossibleWin() {
-		int scoreDiff = p1Score - p2Score;
+		int scoreDiff = score[0] - score[1];
 		if(Math.abs(scoreDiff) >= this.winDiff) { // we have a win
 			if(scoreDiff > 0) { // Player One win
 				this.parent.player1Won();

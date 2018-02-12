@@ -22,11 +22,11 @@ public class ScoreManager  extends ScoringElmt  implements ScoringElmtParent {
 	}
 	@Override
 	void player1Scored() {
-		listOfSet.get(p1Score + p2Score).player1Scored();
+		listOfSet.get(score[0] + score[1]).player1Scored();
 	}
 	@Override
 	void player2Scored() {
-		listOfSet.get(p1Score + p2Score).player2Scored();
+		listOfSet.get(score[0] + score[1]).player2Scored();
 		
 	}
 	@Override
@@ -40,15 +40,16 @@ public class ScoreManager  extends ScoringElmt  implements ScoringElmtParent {
 	
 	@Override
 	public void player1Won() {
-		++p1Score;
-		manageElmt();
-		if(!ended())
-			listOfSet.add(new Set(this));
+		playerWon(0);
 	}
 
 	@Override
 	public void player2Won() {
-		++p2Score;
+		playerWon(1);
+	}
+	
+	private void playerWon(int _ind) {
+		++score[_ind];
 		manageElmt();
 		if(!ended())
 			listOfSet.add(new Set(this));

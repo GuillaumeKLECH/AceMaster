@@ -33,38 +33,29 @@ class Game extends ScoringElmt {
 		}
 	}
 
-
 	@Override
 	String getScoreDescription() {
-		return translateScore(p1Score) + "-" + translateScore(p2Score);	
+		return translateScore(score[0]) + "-" + translateScore(score[1]);	
 	}
-
 
 	@Override
 	void player1Scored() {
-		if(p2Score == 4) {
-			p2Score = 3;
-			p1Score = 3;
-		} else {
-			p1Score += 1;
-		}
-		manageElmt();
+		playerScored(0);
 	}
-
 
 	@Override
 	void player2Scored() {
-		if(p1Score == 4) {
-			p2Score = 3;
-			p1Score = 3;
-		} else {
-			p2Score += 1;
-		}
-		manageElmt();
-		
+		playerScored(1);
 	}
 
-
-	
+	private void playerScored(int _ind) {
+		int otherInd = (_ind == 0) ? 1 : 0;
+		if(score[otherInd] == 4) { // adv reset
+			score[_ind] = score[otherInd] = 3;
+		} else {
+			score[_ind] += 1;
+		}
+		manageElmt();
+	}
 
 }
