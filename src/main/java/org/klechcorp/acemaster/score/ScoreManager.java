@@ -1,154 +1,58 @@
 package org.klechcorp.acemaster.score;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 
-public class ScoreManager {
-
+public class ScoreManager  extends ScoringElmt  implements ScoringElmtParent {
+	private static final int MATCH_WIN_DIFF = 1;
+	private static final int MATCH_WIN_THRESH = 2;
 	private static final int MAX_NBR_OF_SET = 5;
-	public final static String ZERO = "0";
-	public static final String FIFTEEN = "15";
-	public static final String THIRTY = "30";
-	public static final String FORTY = "40";
-	public static final String ADV = "Adv";
-
-	private int p1Score = 0;
-	private int p2Score = 0;
 	
-	private boolean tieBreakMode = false;
-	private boolean p1WonMatch = false;
-	private boolean p2WonMatch = false;
+	List<Set> listOfSet = new ArrayList<>(MAX_NBR_OF_SET);
 	
-	
-	private int 		curSetNbr = 0;
-	private int[] 	p1SetRes = new int[MAX_NBR_OF_SET];
-	private int[] 	p2SetRes = new int[MAX_NBR_OF_SET];
-
-	private void manageGame() {
-		if(!tieBreakMode) {
-			if(p1Score > 3 || p2Score > 3) { //possible game win
-				int scoreDiff = p1Score - p2Score;
-				if(Math.abs(scoreDiff) >= 2) { // we have a game win
-					if(scoreDiff > 0) {
-						p1SetRes[curSetNbr] += 1;
-					} else {
-						p2SetRes[curSetNbr] += 1;
-					}
-					p1Score = p2Score = 0;
-					manageSets();
-				}
-			}
-		} else {
-			if(p1Score >= 7 || p2Score >= 7) {
-				if(p1Score > p2Score) {
-					p1SetRes[curSetNbr] += 1;
-				} else {
-					p2SetRes	[curSetNbr] += 1;
-				}
-				p1Score = p2Score = 0;
-				manageSets();
-			}
-		}
-	}
-
-	private void manageSets() {
-		if(p1SetRes[curSetNbr] > 5 || p2SetRes[curSetNbr] > 5) { //Possible Set win
-			int scoreDiff = p1SetRes[curSetNbr] - p2SetRes[curSetNbr];
-			if(Math.abs(scoreDiff) >= 2 || p1SetRes[curSetNbr] == 7 || p1SetRes[curSetNbr] == 7) {
-				tieBreakMode = false;
-				++curSetNbr;
-				manageMatch();
-			} else if (scoreDiff == 0 && p1SetRes[curSetNbr] == 6) {
-				tieBreakMode = true;
-			}
-		}
+	protected ScoreManager(ScoringElmtParent _parent) {
+		super(_parent, MATCH_WIN_THRESH, MATCH_WIN_DIFF);
+		listOfSet.add(new Set(this));
 	}
 	
-	private void manageMatch() {
-		if(curSetNbr >= 3) { //Possible match won
-			int nbSetForP1 = 0, nbSetForP2 = 0;
-			for(int i = 0; i < p1SetRes.length; ++i) {
-				if(p1SetRes[i] >= 6 && p1SetRes[i] > p2SetRes[i]) {
-					if(++nbSetForP1 == 3) {
-						p1WonMatch = true;
-					}
-				} else if (p2SetRes[i] >= 6 && p2SetRes[i] > p1SetRes[i]) {
-					if(++nbSetForP2 == 3) {
-						p2WonMatch = true;
-					}
-				}
-			}
-		}
+	@Override
+	String translateScore(int _score) {
+		return null;
 	}
-
-	public void playerOneScored() {
-		if(!matchWon()) {
-			if(p2Score == 4) {
-				p2Score = 3;
-				p1Score = 3;
-			} else {
-				p1Score += 1;
-			}
-			manageGame();
-		}
+	@Override
+	void player1Scored() {
+		listOfSet.get(p1Score + p2Score).player1Scored();
 	}
-
-	public void playerTwoScored() {
-		if(!matchWon()) {
-			if(p1Score == 4) {
-				p1Score = 3;
-				p1Score = 3;
-			} else {
-				p2Score += 1;
-			}
-			manageGame();
-		}
+	@Override
+	void player2Scored() {
+		listOfSet.get(p1Score + p2Score).player2Scored();
+		
 	}
-	
-	public boolean matchWon() {
-		return p1WonMatch || p2WonMatch;
-	}
-	
-	public int whoWon() {
-		if(p1WonMatch) {
-			return 0;
-		} else if(p2WonMatch) {
-			return 1;
-		} else {
-			return -1;
-		}
-	}
-
-	public String getSetResult() {
+	@Override
+	String getScoreDescription() {
 		StringJoiner sj = new StringJoiner(" | ");
-		for(int i = 0; i < MAX_NBR_OF_SET; ++i) {
-			sj.add(p1SetRes[i] + "/" + p2SetRes[i]);
+		for(Set set : listOfSet) {
+			sj.add(set.getScoreDescription());
 		}
 		return sj.toString();
 	}
-
-	private String translateScore(int score) {
-		if(!tieBreakMode) {
-			switch (score) {
-			case 0:
-				return ZERO;
-			case 1:
-				return FIFTEEN;
-			case 2:
-				return THIRTY;
-			case 3:
-				return FORTY;
-			case 4:
-				return ADV;
-			default:
-				return null;
-			}
-		} else {
-			return Integer.toString(score);
-		}
+	
+	@Override
+	public void player1Won() {
+		++p1Score;
+		manageElmt();
+		if(!ended())
+			listOfSet.add(new Set(this));
 	}
 
-	public String getCurrentGameScore() {
-		return translateScore(p1Score) + "-" + translateScore(p2Score);
+	@Override
+	public void player2Won() {
+		++p2Score;
+		manageElmt();
+		if(!ended())
+			listOfSet.add(new Set(this));
 	}
+
 
 }
