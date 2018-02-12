@@ -53,6 +53,7 @@ public class Set extends ScoringElmt implements ScoringElmtParent {
 	}
 
 	@Override
+	public
 	String getScoreDescription() {
 		return translateScore(score[0]) + "/" + translateScore(score[1]) + getGameScore();
 	}
@@ -71,6 +72,7 @@ public class Set extends ScoringElmt implements ScoringElmtParent {
 	}
 
 	@Override
+	public
 	void player1Scored() {
 		if(this.tieBreakMode) {
 			tb.player1Scored();
@@ -80,6 +82,7 @@ public class Set extends ScoringElmt implements ScoringElmtParent {
 	}
 
 	@Override
+	public
 	void player2Scored() {
 		if(this.tieBreakMode) {
 			tb.player2Scored();

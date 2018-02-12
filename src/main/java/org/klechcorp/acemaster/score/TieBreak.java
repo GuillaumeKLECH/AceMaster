@@ -11,6 +11,7 @@ public class TieBreak extends ScoringElmt {
 	}
 
 	@Override
+	public
 	String getScoreDescription() {
 		return translateScore(score[0]) + "-" + translateScore(score[1]);
 	}
@@ -23,12 +24,14 @@ public class TieBreak extends ScoringElmt {
 
 
 	@Override
+	public
 	void player1Scored() {
 		playerScored(0);
 	}
 
 
 	@Override
+	public
 	void player2Scored() {
 		playerScored(1);
 	}

@@ -11,7 +11,7 @@ public class ScoreManager  extends ScoringElmt  implements ScoringElmtParent {
 	
 	List<Set> listOfSet = new ArrayList<>(MAX_NBR_OF_SET);
 	
-	protected ScoreManager(ScoringElmtParent _parent) {
+	public ScoreManager(ScoringElmtParent _parent) {
 		super(_parent, MATCH_WIN_THRESH, MATCH_WIN_DIFF);
 		listOfSet.add(new Set(this));
 	}
@@ -21,15 +21,18 @@ public class ScoreManager  extends ScoringElmt  implements ScoringElmtParent {
 		return null;
 	}
 	@Override
+	public
 	void player1Scored() {
 		listOfSet.get(score[0] + score[1]).player1Scored();
 	}
 	@Override
+	public
 	void player2Scored() {
 		listOfSet.get(score[0] + score[1]).player2Scored();
 		
 	}
 	@Override
+	public
 	String getScoreDescription() {
 		StringJoiner sj = new StringJoiner(" | ");
 		for(Set set : listOfSet) {

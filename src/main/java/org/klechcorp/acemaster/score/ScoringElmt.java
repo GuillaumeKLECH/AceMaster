@@ -45,9 +45,9 @@ abstract class ScoringElmt {
 		}
 	}
 	
-	abstract void player1Scored();
-	abstract void player2Scored();
+	public abstract void player1Scored();
+	public abstract void player2Scored();
 	
-	abstract String getScoreDescription();
+	public abstract String getScoreDescription();
 
 }

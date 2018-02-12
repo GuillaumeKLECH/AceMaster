@@ -1,6 +1,6 @@
 package org.klechcorp.acemaster.score;
 
-interface ScoringElmtParent {
+public interface ScoringElmtParent {
 	void player1Won();
 	void player2Won();
 }
