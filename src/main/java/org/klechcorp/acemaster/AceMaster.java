@@ -24,7 +24,7 @@ public class AceMaster {
 			printPlayerList();
 			i = in.nextInt();
 			
-			Match match = new Match(Player.values()[i]);
+			Match match = new Match(Player.values()[i-1]);
 			match.play(in);
 			
 		} catch (InputMismatchException e) {
